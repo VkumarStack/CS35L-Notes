@@ -1,0 +1,37 @@
+Software Construction Concepts:
+    - Using file systems
+    - Scripting via scripting languages (Javascript, Shell, Python)
+    - Integration of various software components
+    - Software configuration (config files)
+    - Testing (test cases)
+    - Version control
+    - Low level debuggging 
+    - Client-server applications
+
+Apps should:
+    - Have data that persists (survives power outages); this is not to be confused with variables in memory (voltaile), as 
+    'persistent' usually refers to data in secondary storage, like in hard drives
+    - Be fast
+    - Be understandable (both to developers and to users)
+
+Linux
+    - Linux is an operating system kernel. The kernel is the central part of the operating system acting as the interface between the hardware 
+    and applications. Linux is written in C and makes use of C libraries. 
+    - Ubuntu is a distribution of Linux, including a version of the Linux kernel as well as a large variety of packages - for applications and libraries
+    that are commonly used
+
+Emacs:
+    - Emacs is an Integrated Development Environment
+    - M-x shell RET | This Emacs command that opens a window in Emacs in shell mode
+    - C-x o | Switch to the other window
+    - C-x C-b | List buffers
+        - A buffer in Emacs refers to data (text) in RAM; if Emacs were to crash, the buffer data would be lost 
+    - C-x C-f filename | Edits filename or creates a new file filename to edit
+    - C-x C-s save
+    - When a file is edited in Emacs, two files are created:
+        - .#F symlink (signals other programs that the file is edited)
+        - #F# copy of the unsaved buffer for F
+
+
+Shell Commands:
+    - uname -a RET | This returns the version of Linux currently being used 
