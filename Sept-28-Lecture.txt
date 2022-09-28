@@ -1,0 +1,40 @@
+Software applications can communicate with each other through the operating system. 
+
+Introspection refers to a program looking at itself; i.e. using the terminal command "ps" (list processes)
+causes the shell to list itself.
+    - When constructing software, it is important to keep introspection in mind since it may be useful to find out 
+    about a program when something goes wrong
+
+Software tools philosophy: You should not attempt to write a big program to solve all of your problems. Rather, you should 
+write your applications using a collection of tools, each of which are simple and tailored towards solving specific problems.
+You should not try to have one tool be too "large" in a sense that it is overused in your application. 
+
+Little languages philosophy: Software tools may need to be configured. One should design small languages, appropriate for each
+tool. These languages should NOT scale - they should be tailored for that tool only. As an example, the shell (sh) has a small 
+scripting language (not a major language like C, etc) to simply approach problems. Another example one may consider is Lisp for 
+Emacs.
+
+Throughput: Bits per second for data to transfer
+Latency: Amount of time for data to transfer (i.e. speed of light considerations)
+
+Terminal interfaces are efficient because they only need to transfer text. Graphical interfaces require lots of bandwith.
+
+Shell (sh) Commands:
+    - ps: List processes and their IDs
+        -e: Flag to see ALL processes, not just thsoe running in the shell
+    - top: Task manager, with most consuming processes listed at the top 
+    - kill [PID]: Kills process, given its process ID
+    - sh: Creates another instance of the shell
+        - sh -c 'command': Creates another instance of the shell only for doing that given command
+    - sleep [time]: Delay for a given amount of time  
+    - echo [argument]: Outputs argument 
+    - less: Like more, but does not read the entire file at once
+    - sudo: Allows you to enter the shell with root permissions (a lot of power)
+        - Avoid being in sudo mode to minimize privileges that may be harmful
+
+    - To sequence shell commands, separate different commands with ";" (i.e. ls ; echo "hello")
+    - To run multiple commands in parallel, separate the commands with "&" 
+    - The output of one command can be fed as the input of another with "|" (i.e. ls -d | echo)
+
+
+Emacs:
