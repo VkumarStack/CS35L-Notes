@@ -23,3 +23,4 @@ In Linux, a link is a way to access file (a directory is a file) content.
     to the file's content. If the original file content is deleted, then the soft link fails. 
 
     The command ln can link link a file, either via hard link or soft link.
+
