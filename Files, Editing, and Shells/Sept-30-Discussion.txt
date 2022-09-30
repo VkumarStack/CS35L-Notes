@@ -1,0 +1,25 @@
+When a command is executed via the command line, the location of that command is searched for 
+through the user's path $PATH. It will look through each directory listed under the user's path 
+until it finds the specified command. As a result, it is important to append any necessary 
+programs to your PATH if they aren't already. To run a command within the current directory 
+instead of searching through $PATH, you you do ./COMM-D. 
+
+The directory $HOME refers to the user's home directory. 
+
+Linux File System Hierarchy:
+    /bin: Contains binary (executable) files for essential user commands
+    /boot: Contains the Linux kernel needed to boot up the system 
+    /dev: Contains device files 
+    /etc: Contains system configuration files
+    /home: Contains personal directories for users, holding documents, files, settings, etcs.
+    /lib: Contains library files that binaries can use 
+
+In Linux, a link is a way to access file (a directory is a file) content.
+    A hard link is a way to directly access the file content (a pointer to the file in memory). It 
+    is effectively the same thing as the file path. There can be multiple hard links to the same file.
+    Deleting all hard links deletes the file. 
+
+    A soft link is more like a shortcut to a file. It stores the path to the file but does not directly point 
+    to the file's content. If the original file content is deleted, then the soft link fails. 
+
+    The command ln can link link a file, either via hard link or soft link.
