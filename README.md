@@ -28,6 +28,11 @@ Linux is also a multiprocess operating system. Many processes can run in the bac
 ### Commonly Used Commands
 Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH.
 
+#### Piping and Redirection
+include process substitution
+
+#### Regex Overview
+
 #### Navigation Commands
 - `pwd` prints the full path of the current directory
 - `cd [DIRECTORY]` changes the current directory to DIRECTORY. 
@@ -81,3 +86,13 @@ DESTINATION will be copied to the current directory.
 - `kill SIGNAL PID` sends the SIGNAL to the process having the process ID PID
   - `-9` signal is the signal to kill
   - `-15` signal is the signal to terminate
+- `zip ZIPFIlE FILE1 ... FILE2` zips FILE1 ... FILE2 into ZIPFILE
+- `unzip ZIPFILE` unzips ZIPFILE
+#### Useful Filtering Commands
+include echo, cat, etc.
+### Shell Scripting
+#### Expansions
+#### Variables
+#### Comparisons
+#### Loops
+
