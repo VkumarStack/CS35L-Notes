@@ -64,5 +64,20 @@ Commands are effectively just executable programs that use the shell as an inter
   - `-r` will recursively remove the directory NAME, meaning that it will also remove everything under the directory **BE CAREFUL WHEN USING THIS** 
 - `rmdir DIRNAME` removes the empty directory DIRNAME; if DIRNAME is not empty, then the command fails
 - `mv SOURCE DESTINATION` moves the file SOURCE to DESTINATION. If DESTINATION is a directory, the file will now a subdirectory of DESTINATION. IF DESTINATION is a file, then SOURCE will be renamed to SOURCE (if SOURCE already exists, then it will be overriden).
-- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, DESTINATION will be copied to the current directory.
-- 
+- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, 
+- `ln TARGET LINKNAME` creates a link to TARGET with LINKNAME. Creates a hard link by default
+  - `-s` flag creates a a symbolic link
+DESTINATION will be copied to the current directory.
+#### System Management Commands
+- `chmod PERMISSIONS FILE` changes the permissions of FILE to PERMISSIONS
+  - Permissions can easily be set using the symbolic mode, where the character representing the group (u = owner, g = group, o = other, a = all), a symbol (+ for adding permissions, - for removing permissions, or = for setting permissions exactly as written), and a character representing the permission (r = read, w = write, x = execute) are all specified
+  - i.e. `chmod u+rwx` gives reading, writing, an executing permissions from the user
+  - i.e. `chmod ug-x` removes executing permissions from the user and group
+  - i.e. `chmod u=rwx,g=rx,o=r`
+- `ps` outputs the current processes. By default, it outputs the processes running in the current shell. The output format is as follows: **Process ID, Terminal Type, Time Running, Command Launching Process**
+  - `-e` flag outputs all running processes
+  - `-T` flag outptus all processes associated with the terminal
+  - `-H` flag outputs a tree for each process (its subprocesses)
+- `kill SIGNAL PID` sends the SIGNAL to the process having the process ID PID
+  - `-9` signal is the signal to kill
+  - `-15` signal is the signal to terminate
