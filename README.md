@@ -43,8 +43,19 @@ Commands are effectively just executable programs that use the shell as an inter
 - `which COMMAND` specifies the file location of COMMAND, as well as any aliases for it
 - `command --version` usually lists the version that the command (or executable program) is running on
 - `find [PATH] [OPTION] [EXPRESSION]` starting from PATH, find files that meet the criteria specified in OPTION, and perform EXPRESSION those found files
-  - Common Options:
-    - dafsadf
+  - Common Options (for any numberic arguments NUM, +NUM is used for arguments greater than NUM, NUM is used for arguments equal to NUM, and -NUM is used for arguments less than NUM):
+    - `-type T` where T is a character representing the type (d for directory, f for regular file, l for symbolic link, etc.) will only find files that match the type T
+    - `-name NAME` will only find files that match NAME (this is the name of the file not the name of the entire directory path to the file)
+    - '-iname NAME' case insensitive -name
+    - `-inum NUM` will find file that has inode number NUM
+    - `-executable` will find files that are executable
+    - `-regex PATTERN` will find the **WHOLE PATH** that matches the Regex PATTERN 
+    - `-mtime NUM' will find files that were modified NUM*24 hours ago
+    - `-mmin NUM' will find files that were modified NUM minutes ago
+    - `-links NUM' will find files that have NUM links
+  - Common Expressions:
+    - `-delete` will delete each file found
+    - -`-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
 #### File Management Commands
 - `touch FILENAME` updates the modification of FILENAME if it exists and creates an empty file named FILENAME if it otherwise does not already exist
   - To actually edit a file, use a text editor such as Emacs, Vim, or Nano
