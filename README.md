@@ -29,9 +29,19 @@ Linux is also a multiprocess operating system. Many processes can run in the bac
 Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH.
 
 #### Navigation Commands
+- `pwd` prints the full path of the current directory
 - `cd [DIRECTORY]` changes the current directory to DIRECTORY. 
   - Omitting the argument changes the current directory to the default home directory for the user, which can also be accessed using **~**. So, `cd` is the same as `cd ~`.
   - The DIRECTORY argument can be an absolute path (a directory starting from the root directory all the way to the current directory) or a relative path (a directory relative to the current directory)
   - Using **.** as an option changes the current directory to the current directory (so nothing at all happens basically). Using **..** as an option changes the current directory to its parent directory.
-
+- `ls` lists the contents of the current directory
+  - `-a` flag lists any hidden files in the directory (such as . or ..)
+  - `-l` flag lists all files in the directory in long format (displays **permissions, number of links, owner, owner group, file size, modification date, and file name**)
+  - `-r` flag recursively lists the directory tree (so it will list all the contents of subdirectories and their subdirectories) 
+  - `-t` flag lists files by modification time
+  - `-S` flag lists files by file size
+- `which [COMMAND]` specifies the file location of COMMAND, as well as any aliases for it
+- `command --version` usually lists the version that the command (or executable program) is running on
+#### File Management Commands
+- `
 
