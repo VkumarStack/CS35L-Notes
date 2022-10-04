@@ -46,7 +46,7 @@ Commands are effectively just executable programs that use the shell as an inter
   - Common Options (for any numberic arguments NUM, +NUM is used for arguments greater than NUM, NUM is used for arguments equal to NUM, and -NUM is used for arguments less than NUM):
     - `-type T` where T is a character representing the type (d for directory, f for regular file, l for symbolic link, etc.) will only find files that match the type T
     - `-name NAME` will only find files that match NAME (this is the name of the file not the name of the entire directory path to the file)
-    - '-iname NAME' case insensitive -name
+    - `-iname NAME` case insensitive -name
     - `-inum NUM` will find file that has inode number NUM
     - `-executable` will find files that are executable
     - `-regex PATTERN` will find the **WHOLE PATH** that matches the Regex PATTERN 
