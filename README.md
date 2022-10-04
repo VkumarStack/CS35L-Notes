@@ -6,7 +6,7 @@ Linux is an operating system (OS), like Windows or MacOS, that acts as an interf
   - Linux is written in C and makes use of various C libraries.
   - Linux itself is based on the Unix operating system. There are various distributions ("distros") of Linux that add commonly used packages and applications on top of the Linux kernel. 
 
-Operating systems like Linux are useful because they allow for the management of **persistent** data - that is, data that remains even after a device loses power. This data is represented through files, and these files as a whole are managed through a file system. Linux utilizes a tree-based file system. Directories are effectively containers for files, and these directories may contain directories within themselves (subdirectories), thereby creating a tree structure. The root directory on a Linux system is **/**, and from this root directory, all other files can be found. 
+Operating systems like Linux are useful because they allow for the management of **persistent** data - that is, data that remains even after a device loses power. This data is represented through files, and these files as a whole are managed through a file system. Each file is uniquely identifed by an **inode** Linux utilizes a tree-based file system. Directories are effectively containers for files, and these directories may contain directories within themselves (subdirectories), thereby creating a tree structure. The root directory on a Linux system is **/**, and from this root directory, all other files can be found. 
 
 Linux users should be familiar with some common directories and their usages:
   - **/bin** contains executable programs (this includes commands) that are part of the Linux operating system, such as cp, cat, ls, etc.
@@ -40,8 +40,18 @@ Commands are effectively just executable programs that use the shell as an inter
   - `-r` flag recursively lists the directory tree (so it will list all the contents of subdirectories and their subdirectories) 
   - `-t` flag lists files by modification time
   - `-S` flag lists files by file size
-- `which [COMMAND]` specifies the file location of COMMAND, as well as any aliases for it
+- `which COMMAND` specifies the file location of COMMAND, as well as any aliases for it
 - `command --version` usually lists the version that the command (or executable program) is running on
+- `find [PATH] [OPTION] [EXPRESSION]` starting from PATH, find files that meet the criteria specified in OPTION, and perform EXPRESSION those found files
+  - Common Options:
+    - dafsadf
 #### File Management Commands
-- `
-
+- `touch FILENAME` updates the modification of FILENAME if it exists and creates an empty file named FILENAME if it otherwise does not already exist
+  - To actually edit a file, use a text editor such as Emacs, Vim, or Nano
+- `mkdir DIRNAME` creates a directory originating in the current directory
+- `rm NAME` removes the file NAME
+  - `-r` will recursively remove the directory NAME, meaning that it will also remove everything under the directory **BE CAREFUL WHEN USING THIS** 
+- `rmdir DIRNAME` removes the empty directory DIRNAME; if DIRNAME is not empty, then the command fails
+- `mv SOURCE DESTINATION` moves the file SOURCE to DESTINATION. If DESTINATION is a directory, the file will now a subdirectory of DESTINATION. IF DESTINATION is a file, then SOURCE will be renamed to SOURCE (if SOURCE already exists, then it will be overriden).
+- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, DESTINATION will be copied to the current directory.
+- 
