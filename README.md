@@ -50,9 +50,9 @@ Commands are effectively just executable programs that use the shell as an inter
     - `-inum NUM` will find file that has inode number NUM
     - `-executable` will find files that are executable
     - `-regex PATTERN` will find the **WHOLE PATH** that matches the Regex PATTERN 
-    - `-mtime NUM' will find files that were modified NUM*24 hours ago
-    - `-mmin NUM' will find files that were modified NUM minutes ago
-    - `-links NUM' will find files that have NUM links
+    - `-mtime NUM` will find files that were modified NUM*24 hours ago
+    - `-mmin NUM` will find files that were modified NUM minutes ago
+    - `-links NUM` will find files that have NUM links
   - Common Expressions:
     - `-delete` will delete each file found
     - -`-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
