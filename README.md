@@ -6,7 +6,7 @@ Linux is an operating system (OS), like Windows or MacOS, that acts as an interf
   - Linux is written in C and makes use of various C libraries.
   - Linux itself is based on the Unix operating system. There are various distributions ("distros") of Linux that add commonly used packages and applications on top of the Linux kernel. 
 
-Operating systems like Linux are useful because they allow for the management of **persistent** data - that is, data that remains even after a device loses power. This data is represented through files, and these files as a whole are managed through a file system. Each file is uniquely identifed by an **inode** Linux utilizes a tree-based file system. Directories are effectively containers for files, and these directories may contain directories within themselves (subdirectories), thereby creating a tree structure. The root directory on a Linux system is **/**, and from this root directory, all other files can be found. 
+Operating systems like Linux are useful because they allow for the management of **persistent** data - that is, data that remains even after a device loses power. This data is represented through files, and these files as a whole are managed through a file system. Each file is uniquely identifed by an **inode**. Linux utilizes a tree-based file system. Directories are effectively containers for files, and these directories may contain directories within themselves (subdirectories), thereby creating a tree structure. The root directory on a Linux system is **/**, and from this root directory, all other files can be found. 
 
 Linux users should be familiar with some common directories and their usages:
   - **/bin** contains executable programs (this includes commands) that are part of the Linux operating system, such as cp, cat, ls, etc.
@@ -15,9 +15,9 @@ Linux users should be familiar with some common directories and their usages:
   - **/etc** contains system configuration files and initialization scripts
   - **/home** contains the home for the system's root user (administrator)
   - **/usr** contains files for programs that are intended for the user and are not vital to the core system
-    - **/usr/bin** contains executable programas that are not essential to Linux
+    - **/usr/bin** contains executable programs that are not essential to Linux
 
-A link is a way to access a file. Most links that you will see on Linux are **hard links**, meaning that they link the specified name of the file and the *actual data of the file itself*. On the other hand, a **soft link**, also known as a **symbolic link**, stores the path to a file but does link to the actual file itself - you can think of them soft links as pointing to hard links.
+A link is a way to access a file. Most links that you will see on Linux are **hard links**, meaning that they link the specified name of the file and the *actual data of the file itself*. On the other hand, a **soft link**, also known as a **symbolic link**, stores the path to a file but does link to the actual file itself - you think of them as pointing to hard links.
   - Soft links can link to a file or a directory. Hard links cannot link to directories (as this could create a loop in the tree stucture of the file system which then messes with any navigation commands like `find`).
   - Deleting a soft link does not delete the original file. To delete the original file, you must delete all hard links to that file.
 
@@ -26,12 +26,51 @@ Linux is a multiuser operating system. The SEAS Linux server, as an example, con
 Linux is also a multiprocess operating system. Many processes can run in the background. You can run a command in the background by including a `&` after the command. You can put a background task in the foreground using the `fg PID` command, where PID is the process ID of the task (more on that later). Similarly, you can use `bg PID` to put a task running in the foreground to the background.
 
 ### Commonly Used Commands
-Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH.
+Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). Running a command without `./` causes the system to search for that command in the PATH. When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH so that it can be run from anywhere.
 
 #### Piping and Redirection
-include process substitution
+- Commands can be chained together via piping. `COMM1 | COMM2` performs COMM1 and uses its output as the input for COMM2
+- The contents of a file can also be used as an argument for a command through `COMM1 < FILE` which is known as input redirection. Most commands effectively do the same thing when they take a file argument.
+  - `COMM <&-` closes the standard input (`&-` after a stream generally closes that stream)
+- The output of a command can be redirected to a file through `COMM1 > FILE`. This inserts the output of COMM1 into FILE - if content already exists, then it is overriden. Overriding the file content can be avoided by using `>>` instead of `>`, which appends the content to the file instead.
+  - `>` is the same as `1>`. This is the standard output stream and is typically where the program displays intended content.
+  - `2>` is the standard error stream and is typically where the program displays error messages.
+  - To redirect stdout to one file and stderr to another: `COMMAND 1> OUTPUTFILE 2> ERRORFILE`
+  - To redirect stdout and stderr to the same file: `COMMAND > FILE 2>&1`. This redirects stdout to FILE and then redirects stderr to stdout, which is already going to FILE.
+- Piping and redirection can be difficult to do for commands that may take multiple arguments, such as `comm`. In this case, it may be better to use **process substitution**, which takes the output of a process(es) and uses it as the input of another process. `COMMAND <(PROCCESS 1) <(PROCESS 2)`
+  - Example: `diff <(ls DIRECTORY1) <(ls DIRECTORY2)` performs the diff command using the output of `ls DIRECTORY1` as one argument and the output of `ls DIRECTORY2` as another argument
+  - This feature works in Bash but not in sh, so be careful when using it
 
 #### Regex Overview
+- Regular expressions (regex) are a sequence of characters that specify a search pattern in text. Many Linux commands such as `sed`, `grep`, etc. make use of regular expressions.
+  - When using commands that make use of regular expressions, enclose the regular expressions in single quotations ' '. The shell will interpret certain special characters in double quotations (such as '$' and '{' and '}'), but it will treat anything in single quotations as literal (other than single quotes themselves), so there won't be interference with the shell's special characters and regex special characters
+  - Most commands by default use Basic Regular Expressions (BRE), which treats special characters such as '?' '+', '{' '}', and '|' as literal (so they might literally match '?' instead of matching 0 or 1 instance of a pattern which '?' normally does in Regex) so to use them specially you must escape them with a '\'. Extended Regular Expressions do not treat these characters as literal, so to use them literally you must escape them with a '\'.
+    - To use a command with Extended Regular Expressions, usually use the `-E` flag with the command. 
+- Syntax:
+  - `CHARACTERS` will match those sequence of characters. These characters can include spaces, so `MATCH THIS` is different from `MATCHTHIS`. 
+    - i.e. `ful` will match the "ful" in "fruitful", "wishful", etc.
+  - `[abc...]` will match any character that is in the brackets - a or b or c
+    - Ranges can be specified `[a-z]` will match all lower case letters
+    - Special type identifiers can also be used, such as `[[:upper:]]` (note the extra pair of brackets)
+      - Common types: `[:upper:]`, `[:lower:]`, `[:alpha:]`, `[:digit]`, `[:blank:]`, `[:punct:]`
+    - i.e. `[da*]` will match the 'd' in "drown", the entire word "dad", and the 'a' and '*' in "star\*"
+  - `[^abc...]` will match any character that is NOT in the brackets (the '^' must be at the beginning of the bracket expression as otherwise it will try to match '^' as an option)
+  - `(...)` groups expressions
+  - `a|b` matches either a or b. This can also be used for groups
+  - `^` is an anchor representing the start of the line
+    - i.e. `^start` will only match "start" if is at the beginning of a line
+  - `$` is an anchor representing the end of the line
+    - i.e. `end$` will only match "end" if it is at the end of a line
+  - `.` matches any character except a newline
+    - i.e. `.ad` will match "mad", "sad", "Dad", "@ad", but not "ad", "\nad" (where \n is a newline).
+  - `(PATTERN)*` matches 0 or more instances of the preceding PATTERN
+    - i.e. `fo*bar` will match 0 or more instances of 'o' since it is right before the '*', so "fbar", "fobar", "foobar", etc. matches
+    - i.e. `(fo)*bar` will match 0 or more instances of 'fo' since it is grouped accordingly, so "bar", "fobar", "fofobar" match but "fbar" and "fofbar" does not.
+  - `(PATTERN)+` will match 1 or more instances of the preceding PATTERN
+  - `(PATTERN)?` will match 0 or 1 instance of the preceding PATTERN
+  - `(PATTERN){NUM}` will match NUM instances of the preceding pattern
+  - `(PATTERN){NUM, }` will match NUM or more instances of the preceding pattern
+  - `(PATTERN){NUM1, NUM2}` will match between NUM1 and NUM2 instances of the preceding pattern
 
 #### Navigation Commands
 - `pwd` prints the full path of the current directory
