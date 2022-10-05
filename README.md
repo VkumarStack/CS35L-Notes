@@ -124,6 +124,7 @@ DESTINATION will be copied to the current directory.
   - `-e` flag outputs all running processes
   - `-T` flag outptus all processes associated with the terminal
   - `-H` flag outputs a tree for each process (its subprocesses)
+- `df` displays a report on the system disk usage
 - `kill SIGNAL PID` sends the SIGNAL to the process having the process ID PID
   - `-9` signal is the signal to kill
   - `-15` signal is the signal to terminate
