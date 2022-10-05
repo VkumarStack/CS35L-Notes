@@ -1,0 +1,28 @@
+Directories can be thought of as mappings between filename components and inodes. It is possible for multiple names to be "connected" to the same inode 
+of a file. This is the idea of a hard link. When removing a file with the command rm, you are just removing the mapping between that filenamne and its inode.
+To functionally "delete" a file, you must remove all mappings between that filename and its inode - in other words, you must delete all of its hard links. 
+This is kept track of for a "link count" for each file. Each time "rm" is performed, the link count for that file is decremented (if there is zero, then
+the kernel reclaims the storage for that file). The storage will not be reclaimed if the file is currently being processed ("opened") by a program - it will
+wait until that program stops processing that file before deleting it. Symbolic links are effectively aliases - creating a symbolic link to a file/directory 
+will effectively interpret that symbolic link as an alias for the name of the file/directory that it was originally linked to. Deleting that original file/directory 
+leaves a dangling symbolic link - it will try to open a file/directory that no longer exists (but if you were to create a new file/directory with the original name,
+then the symbolic link still works towards pointing that file). When following symbolic links, the operating system effectively "substitutes" the symbolic link with
+the name that it follows.
+
+Files are updated (i.e. when you save a file via Emacs) in an atomic manner by writing to a temporary file (often denoted as FILE#) that allows for other programs 
+to read while the update is being performed so that they see a consistent version. Then, after the updating is done being performed, the temporary file now becomes 
+the current version of the file (mv FILE# FILE), deleting the old, unchanged version. This is a good approach in general, like with working with client/server relationships. 
+
+Commands like sed edits streams - it will take in a "stream" of data, edit that stream of data, and then output that edited data to the output "stream". sed is a very powerful
+command, as it can effectively be used to perform other commands.
+
+p prints
+q quit
+s/PATTERN/PATTERN substitute
+d delete
+
+awk is a scripting language designed to process text as a string (not as a stream like sed). 
+    
+Scripting langauges like Python move away from being low-level. They implement certain features built-in (i.e. you don't have to manage pointers, memories, etc. in order to 
+create hash tables in Python - it is already built in via the dictioanry data structure). Python has many built in algorithms and data structures as well as built-in indentation
+forced by the system. 
