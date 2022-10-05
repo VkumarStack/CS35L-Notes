@@ -28,6 +28,9 @@ Linux is also a multiprocess operating system. Many processes can run in the bac
 ### Commonly Used Commands
 Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). Running a command without `./` causes the system to search for that command in the PATH. When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH so that it can be run from anywhere.
 
+- Ctrl-C to stop a process
+- Ctrl-Z to suspend a process
+
 #### Piping and Redirection
 - Commands can be chained together via piping. `COMM1 | COMM2` performs COMM1 and uses its output as the input for COMM2
 - The contents of a file can also be used as an argument for a command through `COMM1 < FILE` which is known as input redirection. Most commands effectively do the same thing when they take a file argument.
