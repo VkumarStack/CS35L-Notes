@@ -72,6 +72,8 @@ Commands are effectively just executable programs that use the shell as an inter
   - `(PATTERN){NUM, }` will match NUM or more instances of the preceding pattern
   - `(PATTERN){NUM1, NUM2}` will match between NUM1 and NUM2 instances of the preceding pattern
 
+- To get information about any command, do `man COMMAND`, outputs a manual page for that command.
+
 #### Navigation Commands
 - `pwd` prints the full path of the current directory
 - `cd [DIRECTORY]` changes the current directory to DIRECTORY. 
@@ -128,9 +130,60 @@ DESTINATION will be copied to the current directory.
 - `zip ZIPFIlE FILE1 ... FILE2` zips FILE1 ... FILE2 into ZIPFILE
 - `unzip ZIPFILE` unzips ZIPFILE
 #### Useful Filtering Commands
-include echo, cat, etc.
+- `echo ARGUMENT` prints out ARGUMENT (does not read argument)
+  - This will also print out shell expansions (i.e. `echo *` will print out all items in the current directory since '*' is expanded by the shell)
+  - `echo` is usually used to pipe in a specified text to another command or file (i.e. `echo "Hello" | grep 'ello'`)
+- `cat FILE1...` concatenates multiple files (if they are listed) and then prints them out. If there are no arguments, then standard input is read
+  - `cat` might be used in the context of a script to pipe into another command (i.e. `cat | head` will use the standard input as an argument for head) 
+- `tac FILE1...` does the same as cat, but prints the text in reverse-line order 
+- `grep PATTERN FILE...` prints the lines in FILE(s) that match the specified PATTERN (in regex)
+  - `-E` flag uses Extended Regular Expression (ERE)
+  - `-v` flag prints out all lines that do NOT match the pattern
+  - `-c` flag prints only a count of lines that match the pattern
+  - `-i` flag performs a case insensitive match
+  - `-n` flag displays the matched lines and their line numbers
+- `sort FILE` sorts the file by line
+  - `-b` flag ignores leading blanks
+  - `-d` flag considers only blanks and alphanumerical characters
+  - `-f` flag ignores case (converts to uppercase)
+  - `-g` flag compares according to numerical values (as opposed to string comparisons)
+  - `-r` flag reverses the sort
+- `head -n NUM FILE` prints out the first NUM lines (just `head` defaults to the first 10) 
+- `tail -n NUM FILE` prints out the last NUM lines (just `tail` defaults to the last 10)
+- `wc FILE` prints out the number of lines, words, and bytes of FILE
+  - `-l` flag just prints out the number of lines
+  - `-w` flag just prints out the number of words
+  - `-c` flag just prints out the number of bytes
+  - `-m` flag just prints out the number of characters
+- `tr SET1 SET2 FILE` translates the characters from SET1 to SET2 in FILE. Translate works well with replacing single characters with single characters. Outputs the edited version of FILE.
+  - To specify a range of characters, just use a - (i.e. `A-Z`). 
+  - `-C` flag complements the characters in SET1
+  - `-s` flag squeezes characters replaced via SET2 so that they don't repeat
+- `sed SCRIPT FILE` stream editor that acts according to SCRIPT for instances in FILE, where SCRIPT can contain regex patterns; outputs the edited version of FILE
+  - `-E` flag uses Extended Regular Expressions
+  - `sed 's/PATTERN/PATTERN2/'` replaces the first occurence in the line of PATTERN with PATTERN2
+  `sed 's/PATTERN/PATTERN2/n'` replaces the second occurence in the line of PATTERN with PATTERN2
+  - `sed 's/PATTERN/PATTERN2/g'` replaces all occurences of PATTERN with PATTERN2
+  - `sed 'NUM s/PATTERN/PATTERN2/'` replaces replaces occurences only on the NUM line 
+  - `sed s/PATTERN//g` deletes all instances of PATTERN 
+  - `-n` flag prints out just the lines that have been altered
+- `comm FILE1 FILE2` compares FILE1 and FILE2, assumed to be sorted, line by line and outputs in a three-column format: (1) lines unique to FILE1, (2) lines unique to FILE2, (3) lines contained in both files
+  - `num` flag suppresses the specified column (i.e. `-12` only shows lines shared by both files)
+- `uniq FILE` assuming FILE is sorted, prints out FILE with duplicate lines filtered out
+  - `-d` only prints lines which were repeated
+- `diff FILE1 FILE2` outputs differences between FILE1 and FILE2. 
 ### Shell Scripting
+- Shell scripting essentially boils down to making use of the shell's existing commands to create other scripts, as well as basic computer science structures such as variables, comparisons, and loops.
 #### Expansions
+- The shell will expand certain characters if they are not in quotes. Use single quotes to prevent characters from being expanded and to literally  (except for ' itself). Double quotes will also literally interpret most characters except for '$', '`', and '\'.
+- One form of expansion done by the shell is globbing, which looks for pattern (similar to regex, but not the same) in filenames. This involves the characters '?', '*'
+  - `?` is used to match a single character
+    - i.e. `echo exer?.html` will output exer1.html, exer2.html, exer3.html if they exist in the directory
+  - `*` is used to match zero or more characters
+    - i.e. `echo *.txt` will output all files in the directory that end in ".txt"
+  - `[SET]` is used to match characters in the range SET (i.e. `[A-Z]`)
+    - i.e. `echo exer[1-9].html` would output exer1.html, exer2.html, exer3.html if they are in the current directory
+    - An '!' at the beginning of the set indicates a complement (i.e. `[!1-9]`)
 #### Variables
 #### Comparisons
 #### Loops
