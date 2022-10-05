@@ -26,3 +26,5 @@ awk is a scripting language designed to process text as a string (not as a strea
 Scripting langauges like Python move away from being low-level. They implement certain features built-in (i.e. you don't have to manage pointers, memories, etc. in order to 
 create hash tables in Python - it is already built in via the dictioanry data structure). Python has many built in algorithms and data structures as well as built-in indentation
 forced by the system. 
+
+Languages like Python consolidate all the different "little languages" like sh, Perl, awk, etc. into a single "large language". 
