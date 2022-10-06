@@ -164,11 +164,12 @@ DESTINATION will be copied to the current directory.
   - `-C` flag complements the characters in SET1
   - `-s` flag squeezes characters replaced via SET2 so that they don't repeat
 - `sed SCRIPT FILE` stream editor that acts according to SCRIPT for instances in FILE, where SCRIPT can contain regex patterns; outputs the edited version of FILE
+  - `sed` is a scripting language with certain commands; `p` prints, `q` exits the editor, `s` substitutes (using `/` as a delimiter between the item being substituted and the substitution i.e. `s/REPLACEME/WITHTHIS/`), `d` deletes 
   - `-E` flag uses Extended Regular Expressions
   - `sed 's/PATTERN/PATTERN2/'` replaces the first occurence in the line of PATTERN with PATTERN2
   `sed 's/PATTERN/PATTERN2/n'` replaces the second occurence in the line of PATTERN with PATTERN2
   - `sed 's/PATTERN/PATTERN2/g'` replaces all occurences of PATTERN with PATTERN2
-  - `sed 'NUM s/PATTERN/PATTERN2/'` replaces replaces occurences only on the NUM line 
+  - `sed 'NUM s/PATTERN/PATTERN2/'` replaces the first occurence only on the NUM line 
   - `sed s/PATTERN//g` deletes all instances of PATTERN 
   - `-n` flag prints out just the lines that have been altered
 - `comm FILE1 FILE2` compares FILE1 and FILE2, assumed to be sorted, line by line and outputs in a three-column format: (1) lines unique to FILE1, (2) lines unique to FILE2, (3) lines contained in both files
@@ -178,6 +179,7 @@ DESTINATION will be copied to the current directory.
 - `diff FILE1 FILE2` outputs differences between FILE1 and FILE2. 
 ### Shell Scripting
 - Shell scripting essentially boils down to making use of the shell's existing commands to create other scripts, as well as basic computer science structures such as variables, comparisons, and loops.
+- When creating a shell script, include at the top of the script `#!/bin/sh` or `#!/bin/bash`, which indicates what environment the system should execute the script in (sh or Bash)
 #### Expansions
 - The shell will expand certain characters if they are not in quotes. Use single quotes to prevent characters from being expanded and to literally  (except for ' itself). Double quotes will also literally interpret most characters except for '$', '`', and '\'.
 - One form of expansion done by the shell is globbing, which looks for pattern (similar to regex, but not the same) in filenames. This involves the characters '?', '*'
@@ -188,7 +190,58 @@ DESTINATION will be copied to the current directory.
   - `[SET]` is used to match characters in the range SET (i.e. `[A-Z]`)
     - i.e. `echo exer[1-9].html` would output exer1.html, exer2.html, exer3.html if they are in the current directory
     - An '!' at the beginning of the set indicates a complement (i.e. `[!1-9]`)
+- Variables (more on that next section) are expanded using the '\$' character preceding the variable name. A '$' in a non-quoted or double-quoted expression will be expanded. In a double-quoted expression the expansion can be escaped with a `\`. In a single-quoted expression, the '\$' character will be treated literally and will not expand
+  - i.e. `x=2`
+  - `echo $x` => `2`
+  - `echo "$x"` => `2`
+  - `echo '$x'` => $x
+- The '~' character is also expanded to the user's home directory
+- The output of a command can also be expanded into an expression using either backticks \`COMMAND\` or a dollar-sign followed by parentheses $(COMMAND)
+  - i.e. ``echo `ls` `` => echoes the output of ls, which is the contents of the current directory
+- Braces can be used to expand a range
+  - i.e. `echo {1..10}` will output 1 2 3 4 5 6 7 8 9 10
 #### Variables
+- Variables are created and assigned a value in the format `VARNAME=content`. There must be no space in between the equals sign. The variable content can be any type - a string, an int, a floating point number
+- The value of a variable can be obtained using the '$' character followed by the variable name (no space) `$VARNAME`
+  - This can also be done using `${VARNAME}`, which acts as a disambiguation mechanism
+    - cases such as `echo $VARNAME.txt` where the intention is to replace just the VARNAME portion with the variable will fail, so the bracket grouping should be used instead as `echo ${VARNAME}.txt`
+- The shell has built in variables:
+  - `$?` is the last command or program's return value
+  - `$$` is the current script's process ID
+  - `$#` is the number of arguments passed to the script
+  - `$@` is all arguments passed to the script
+  - `$1`, `$2`, `$3` ... `$9` are the positional arguments passed to the script (i.e. running a made script `./script 'first' 2 "three"` will have the positional arguments 'first', 2, and "three")
+  - `$0` is the name of the script
+- Variables can be assigned from standard input using the `read` command, which reads a line from standard input into the variable
+- Normally, variables are scoped within the script that they are contained. A script or process can inherit a variable from its parent process or script using the `export VARNAME` command. 
 #### Comparisons
+- The `test` command, also known as `[` is used to perform any sort of comparison. Comparisons are usually in the syntax `[ ARG1 ARG2 ARG2 ]`. Note that the spaces are important.
+  - Common Tests:
+    - `=` string equality
+    - `!` logical not
+    - `-eq` numeric equality
+    - `-ne` numeric inequality
+    - `-lt` less than
+    - `-le` less than or equal
+    - `-gt` greater than
+    - `-gte` greater than or equal
+    - `-z` string is zero length
+    - `-n` string is not zero length
+    - `-nt` newer than
+    - `-d` is directory
+    - `-f` is file
+    - `-r` is readable file
+    - `-w` is writable file
+    - `-x` is executable file
+    - `&&` logical AND
+    - `||` logical OR
+  - i.e. `[ "$x" -lt "0" ]` checks if x is less than 0
+- If statements involve the test command, a then, and a fi to close the if. You can also use else statements.
+  - `if [ TEST ]
+      then
+        IF_CODE
+      else
+    fi`
+
 #### Loops
 
