@@ -1,0 +1,3 @@
+Both Lisp and Python are commonly used as scripting langauges. As opposed to being compiled, like C/C++, Python and 
+Lisp are interpreted languages - programs do not need to be compiled, but rather they can run a line at a 
+time.

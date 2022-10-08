@@ -237,11 +237,38 @@ DESTINATION will be copied to the current directory.
     - `||` logical OR
   - i.e. `[ "$x" -lt "0" ]` checks if x is less than 0
 - If statements involve the test command, a then, and a fi to close the if. You can also use else statements.
-  - `if [ TEST ]
-      then
-        IF_CODE
-      else
-    fi`
+  -     if [ TEST ]
+        then
+          IF_CODE
+        elif [ TEST ]
+          ELIF_CODE  
+        else  
+          ELSE_CODE
+        fi
+  - Colons `;` can be used to join together lines to make more readable syntax:
+    -     if [ TEST ]; then
+            IF_CODE; elif
+          elif [ TEST ]; then
+            ELIF_CODE  
+          else  
+            ELSE_CODE
+          fi
+            
 
 #### Loops
-
+- Looping conventions are pretty similar to other program languages. Loop control statements such as `break` and `continue` can be used when shell scripting.
+- 'while' loops have pretty straightforward syntax:
+  -       while [ TEST STATEMENT ]
+          do 
+            CODE
+          done  
+    - `while :` always evaluates to to true, so this can be used as a way to do infinite looping (or have a loop dictated by a `break` exit condition)
+- 'for' loops operate on a list of arguments
+  -       for VARIABLE in LIST
+          do
+            CODE
+          done
+  - i.e. `for i in 1 2 3 4 5` will iterate through 1, 2, 3, 4, and 5
+  - i.e. `for i in {1..5}` will do the same as above
+  - i.e. `for i in $(seq 1 5)` will do the same as above
+- The `do` statement in both above loops can be put immediately after the `for` clause if separated with a semicolon `;`
