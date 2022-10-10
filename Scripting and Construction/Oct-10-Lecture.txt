@@ -1,0 +1,62 @@
+Emacs Lisp (ELisp) is an example of an app-specific language. Lisp was effectively adapted to be 
+used in the Emacs environment (i.e. blend well with Emacs commands)
+    Variables in ELisp (i.e. (setq pi 3.14)) all share a global namespace. Accessing undefined 
+    variables results in an error.
+
+    The "let" function in Elisp creates a local variable scope. Format: (let VARLIST BODY). 
+    i.e. (let ((pi 3.14) (tau 6.28))
+                (message pi)
+                (message tau))
+
+    To define a function in Lisp, you do (defun NAME (ARGLIST) (BODY)).
+    i.e. (defun distance (a b) (sqrt (+ (* a a) (* b b))))
+    Functions will return the output of the last expression in the function body. 
+
+    The most basic data structure in ELips is known as the 'cons', which is just a pair (A, B). Typically,
+    B is a pointer to another cons, which may point to an item and another pointer, which continues as a 
+    linked list.
+    List:
+        [A | ] -> [B | ] -> [C | ] -> [D | ] - > [E | \0] * Terminates at the empty list \0
+        (A B C D E)
+    Pair:
+        [A | B]
+        (A . B) * The dot essentially denotes that a data structure is a pair, not a list 
+
+    Example:
+        [A | ] -> [B | ] -> [C | D]
+        (A B C . D)
+
+    Programs in Lisp use data notation. Representing data this way is easier compared to other languages (like C++)
+    because it can be evaluated in a more straightforward manner. 
+    Example: (defun x (n) (* n n))
+    [defun | ] -> [x | ] -> [ | ] -> [ | \0]
+                             |        |
+                             v        [* | ] -> [n | ] -> [n | \0]
+                             [n | \0]
+    
+    Of course, since ELisp data structures are so pointer-based, evaluating functions normally can be slow. What is typically 
+    done is bytecode compilation - languages like ELisp, Javascript, etc. will try to compile expressions into bytecode expressions 
+    so that such expressions do not need to be costly executed every single time. Compiling to bytecode is better than machine code 
+    in that it is portable - it can be used on any architecture. However, bytecode is generally slower than machine code. 
+        To do this in emacs lisp, use the byte-compile-file command.
+    
+    Emacs Lisp uses a single-threaded interpreter. There is a single instruction register (one core). This also applies 
+    for the byecode. This effectively means that instructions are executed sequentially. 
+
+    (global-set-key "@" 'what-cursor-position) 
+    Including a ' before an expression in Lisp tells the language to not evaluate the symbol. In the context above, it
+    sets the "@" to be the function what-cursor-position.    
+
+Python, on the other hand, is a general purpose scripting language. It may not be the best option
+for specific applications (i.e. creating a text editor, it would be better to use Lisp), but it can 
+be used generally.
+    Python is an object-oriented language - every value is an object and has (1) identity (like an address in memory) (2) 
+    type (i.e. int, string, etc.) (3) value. Typically, (1) and (2) cannot be changed. The value (3) can be changed only 
+    if the object is mutable (as opposed to being immutable).
+
+    The "is" operator in Python checks if two items are the same objects (same identity)
+        i.e. "a is b" evaluates to true only if a is the same object as b 
+        i.e. "a == b" evaluates to true only if a has the same value as b 
+        
+    The "type(OBJECT))" returns the type of the OBJECT
+        i.e. type(27) outputs <class 'int'>
