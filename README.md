@@ -113,7 +113,7 @@ Commands are effectively just executable programs that use the shell as an inter
   - `-r` will recursively remove the directory NAME, meaning that it will also remove everything under the directory **BE CAREFUL WHEN USING THIS** 
 - `rmdir DIRNAME` removes the empty directory DIRNAME; if DIRNAME is not empty, then the command fails
 - `mv SOURCE DESTINATION` moves the file SOURCE to DESTINATION. If DESTINATION is a directory, the file will now a subdirectory of DESTINATION. IF DESTINATION is a file, then SOURCE will be renamed to SOURCE (if SOURCE already exists, then it will be overriden).
-- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, 
+- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, a new file is created. 
 - `ln TARGET LINKNAME` creates a link to TARGET with LINKNAME. Creates a hard link by default
   - `-s` flag creates a a symbolic link
 DESTINATION will be copied to the current directory.
