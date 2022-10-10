@@ -47,7 +47,7 @@ Commands are effectively just executable programs that use the shell as an inter
 #### Regex Overview
 - Regular expressions (regex) are a sequence of characters that specify a search pattern in text. Many Linux commands such as `sed`, `grep`, etc. make use of regular expressions.
   - When using commands that make use of regular expressions, enclose the regular expressions in single quotations ' '. The shell will interpret certain special characters in double quotations (such as '$' and '{' and '}'), but it will treat anything in single quotations as literal (other than single quotes themselves), so there won't be interference with the shell's special characters and regex special characters
-  - Most commands by default use Basic Regular Expressions (BRE), which treats special characters such as '?' '+', '{' '}', and '|' as literal (so they might literally match '?' instead of matching 0 or 1 instance of a pattern which '?' normally does in Regex) so to use them specially you must escape them with a '\'. Extended Regular Expressions do not treat these characters as literal, so to use them literally you must escape them with a '\'.
+  - Most commands by default use Basic Regular Expressions (BRE), which treats special characters such as '?' '+', '{' '}', and '|' as literal (so they might literally match '?' instead of matching 0 or 1 instance of a pattern which '?' normally does in Regex) so to use them specially you must escape them with a '\\'. Extended Regular Expressions do not treat these characters as literal, so to use them literally you must escape them with a '\\'.
     - To use a command with Extended Regular Expressions, usually use the `-E` flag with the command. 
 - Syntax:
   - `CHARACTERS` will match those sequence of characters. These characters can include spaces, so `MATCH THIS` is different from `MATCHTHIS`. 
@@ -104,7 +104,7 @@ Commands are effectively just executable programs that use the shell as an inter
     - `-links NUM` will find files that have NUM links
   - Common Expressions:
     - `-delete` will delete each file found
-    - -`-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
+    - `-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
 #### File Management Commands
 - `touch FILENAME` updates the modification of FILENAME if it exists and creates an empty file named FILENAME if it otherwise does not already exist
   - To actually edit a file, use a text editor such as Emacs, Vim, or Nano
@@ -113,7 +113,7 @@ Commands are effectively just executable programs that use the shell as an inter
   - `-r` will recursively remove the directory NAME, meaning that it will also remove everything under the directory **BE CAREFUL WHEN USING THIS** 
 - `rmdir DIRNAME` removes the empty directory DIRNAME; if DIRNAME is not empty, then the command fails
 - `mv SOURCE DESTINATION` moves the file SOURCE to DESTINATION. If DESTINATION is a directory, the file will now a subdirectory of DESTINATION. IF DESTINATION is a file, then SOURCE will be renamed to SOURCE (if SOURCE already exists, then it will be overriden).
-- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, 
+- `cp SOURCE DESTINATION` copies the file SOURCE to DESTINATION. If DESTINATION is a directory, the copied file will be a subdirectory of DESTINATION. Otherwise, a new file is created. 
 - `ln TARGET LINKNAME` creates a link to TARGET with LINKNAME. Creates a hard link by default
   - `-s` flag creates a a symbolic link
 DESTINATION will be copied to the current directory.
@@ -167,7 +167,7 @@ DESTINATION will be copied to the current directory.
   - `sed` is a scripting language with certain commands; `p` prints, `q` exits the editor, `s` substitutes (using `/` as a delimiter between the item being substituted and the substitution i.e. `s/REPLACEME/WITHTHIS/`), `d` deletes 
   - `-E` flag uses Extended Regular Expressions
   - `sed 's/PATTERN/PATTERN2/'` replaces the first occurence in the line of PATTERN with PATTERN2
-  `sed 's/PATTERN/PATTERN2/n'` replaces the second occurence in the line of PATTERN with PATTERN2
+  `sed 's/PATTERN/PATTERN2/n'` replaces the nth occurence in the line of PATTERN with PATTERN2
   - `sed 's/PATTERN/PATTERN2/g'` replaces all occurences of PATTERN with PATTERN2
   - `sed 'NUM s/PATTERN/PATTERN2/'` replaces the first occurence only on the NUM line 
   - `sed s/PATTERN//g` deletes all instances of PATTERN 
