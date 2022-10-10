@@ -167,7 +167,7 @@ DESTINATION will be copied to the current directory.
   - `sed` is a scripting language with certain commands; `p` prints, `q` exits the editor, `s` substitutes (using `/` as a delimiter between the item being substituted and the substitution i.e. `s/REPLACEME/WITHTHIS/`), `d` deletes 
   - `-E` flag uses Extended Regular Expressions
   - `sed 's/PATTERN/PATTERN2/'` replaces the first occurence in the line of PATTERN with PATTERN2
-  `sed 's/PATTERN/PATTERN2/n'` replaces the second occurence in the line of PATTERN with PATTERN2
+  `sed 's/PATTERN/PATTERN2/n'` replaces the nth occurence in the line of PATTERN with PATTERN2
   - `sed 's/PATTERN/PATTERN2/g'` replaces all occurences of PATTERN with PATTERN2
   - `sed 'NUM s/PATTERN/PATTERN2/'` replaces the first occurence only on the NUM line 
   - `sed s/PATTERN//g` deletes all instances of PATTERN 
