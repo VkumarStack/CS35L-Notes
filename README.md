@@ -104,7 +104,7 @@ Commands are effectively just executable programs that use the shell as an inter
     - `-links NUM` will find files that have NUM links
   - Common Expressions:
     - `-delete` will delete each file found
-    - -`-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
+    - `-exec COMMAND {} \;` will execute the command COMMAND with each file found as an argument
 #### File Management Commands
 - `touch FILENAME` updates the modification of FILENAME if it exists and creates an empty file named FILENAME if it otherwise does not already exist
   - To actually edit a file, use a text editor such as Emacs, Vim, or Nano
