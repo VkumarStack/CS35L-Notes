@@ -1,0 +1,95 @@
+Most scripting languages involve manipulating primitive elements or commands. Emacs Lisp, for example, mostly 
+involves scripting with the Emacs built in commands and variables. Shell, as another example, involves 
+scripting with built in programs. Python is similar - it is used to "glue" together code modules from other languages 
+and then script with such modules. 
+    With this in mind, code should be packaged in a manner that allows it to be easily "glued" together with other 
+    packages. For example, Python scripts should consider standard output and input when in the context of shell 
+    scripting since many shell scripts rely on those features for pipelining and redirection.
+
+Python is a dynamically typed language, but types still do exist - they just don't need to be explicitly defined for each 
+variable. Every single variable in Python is an object - it will point to a primitive or primitives. 
+    None: null equivalent
+    Numbers (All Immutable):
+        Int: integers
+        Float: floating point numbers 
+        Complex: complex numbers 
+    Sequences:
+        String (Unicode strings also exist to cover more characters) IMMUTABLE
+        List MUTABLE 
+        Tuple IMMUTABLE
+            Basically like a list but immutable 
+        Buffer MUTABLE
+            Basically like a mutable string 
+    Mapping:
+        Dictionary 
+            Essentially a hash table 
+    Callable:
+        Function
+        Class
+
+Sequence operations:
+    s[i] Accesses the ith element of the sequence. 0 <= i < len(s) OR -len(s) <= i <= -1. A negative index starts counting 
+    backwards from the sequence.     
+    s[i:j] Selects a subsequence of s from [i, j)
+    s[i:] Selects a subsequence from i to everything after 
+    s[:j] Selects a subsequence from the start to j 
+    len(s) Returns the length of s 
+    min(s) Returns the minimum element of the sequence 
+    list(s) Constructs a List whose elements are the same as the sequence s 
+
+    Mutable Sequence Operations:
+        s[i] = v Assigns to the ith element of the sequence
+        s[i:j] = s1 Assigns the subsequence of s with s1 (which MUST be a sequence)
+        del s[i] Deletes the ith element from s
+        del s[i:j] Deletes the subsequence [i, j)
+
+    List Operations:
+        Python lists are NOT linked lists. They are an analog to vectors in C++. Lists contain information about the 
+        List length as well as how much overall storage is allocated for it. On each append, if there is enough storage, 
+        it will append it - otherwise it will extend the storage (double the size usually) and then append. 
+
+        s.append(v) Adds the element v to the end of the list 
+        s.extend(s1) Adds the sequence s1 to the end of the list 
+        s.count(v) Counts the number of elements v in the list 
+        s.index(v) Returns the first index of v in the list or an error 
+        s.insert(i, v) Inserts v at the ith index in s (equivalent to s[i:i] = [v])
+        s.pop(i) Deletes the element at i and returns it 
+        s.pop() Deletes the last element in the list and returns it 
+        s.remove(v) Finds the first instance of v and removes it 
+        s.reverse() Reverses the list in place 
+        s.sort() Sorts the list in place
+
+    String Operations:
+        s.index(sub[, start [, end]]) Looks for index of substring, with optional index bounds of the search 
+        s.join(t) Joins all the strings in t (which is a sequence of strings) with s as a separator.
+        s.split([sep [,maxsplit]]) Splits the string s at separator, maxsplit times 
+
+Dictionary Operations:
+    Dictionary keys must be immutable - as otherwise it cannot be hashed 
+    d = {} Creates a UNIQUE empty dictionary (i.e. e = {}, e is not d)
+    d = {"hello" : 12}  
+    d[k] Looks up the entry in the dictionary with key k and return its value. 
+    d[k] = v Either stores element v for key k in the hash table or replaces the value of it already exists 
+    len(d) Returns the length of the dictionary
+    d.clear() Clears out the dictionary
+    d.copy() Creates a copy of the dictionary 
+    d.items() Returns a list of (key, values) tuples 
+    d.keys() Returns a list of keys 
+    d.values() Returns a list of values 
+    d.update(d1) Updates d with key/values from d1, overriding values of d or adding new key/value pairs if necessary
+    del d[k] Deletes the key/value pair
+    d.get(k[, v]) Deletes the k value of d (like d[k]) but if there is no value, then it returns v 
+    d.popitem() Deletes an (effectively random) key/value pair from the dictionary and returns it 
+
+Functions:
+    Ways to define a function:
+        def f(x): // Named function
+            return x*x-1
+        f = (lambda x: x * x - 1) // Nameless lambda function, often used for callbacks (functions that accept 
+        other functions as arguments)
+Class:
+    class c(a,b): // Defines a class with parents a, b  
+        def m(self, x, y):
+            BODY 
+            
+    d = c Assigns the class c to do; classes are objects that are determined at runtime - not compile-time
