@@ -1,0 +1,149 @@
+When dealing with multiple inheritance in Python, child-parents can be represented as directed acyclic graphs 
+(DAGs). When a child class looks for its parent methods, it performs a depth-first search starting left (from 
+its first parent). Therefore, if there is disagreement with two parent classes, the first parent class "wins". '
+This is a downside to multiple inheritance, as it adds more complexity to your code.
+    i.e.    class c(a, b) 
+            class a(w, x)
+            class b(x, z)
+            class x(q, r)
+            class z(q, r)
+    If a particular member were to be serached for, the path: a -> w -> x -> q -> r -> b -> z 
+    would be followed. If that member were found anywhere along those classes, then that member would be used.
+
+
+A class is an object, and it has a special member "__dict__". In Python, names with a leading "__" are usually
+special (i.e. reserved to the system). 
+    __dict__ is a dictionary that maps names to values (member variables and methods to their values). 
+        i.e. Doing c.__dict__['m'] is equivalent to doing c.m 
+    
+    This dictionary is mutable, so it is entirely possible to change a class at runtime by altering this dictionary,
+    which could be very powerful. 
+
+The __init__ method in a class is effectively the constructor of the class:
+    i.e.
+        class c:
+            def __init__ (self, a, b): <- redefines the default constructor of class c 
+                self.x = a 
+                self.y = a
+            def __repr__(self): <- returns a string representation of the object 
+                return "c(%d,%d)" % (a,b)
+            def __str__(self): <- returns a shorthand string of the object, used whenever the object is converted to a string  
+                return "<c>"
+            def __comp__(self, other): <- returns -1 for self < other, 0 for equal, and 1 for self > other 
+                return -1 | 0 | 1 
+            def __lt__(self, other): <- specific less than operator 
+                CODE 
+            def __gt__(self, other): 
+                CODE
+            def __nonzero__(self): <- handles the case of using "if" with the object (i.e. if xyz: ...)
+                CODE 
+            def __hash__(self): <- provides your own hash function rather than the default way of hashing objects 
+                CODE 
+            def __add__(self, other): <- overloads the plus operator 
+
+        xyz = c(26, 13)
+
+            // __comp__ may fail with floating points given that they can also return NaN, so specific comparison operators 
+            // can be defined - if __lt__, __gt__, etc. are defined, then those will be used as opposed to __comp__ when possible.
+            // These comparison methods are used whenever sort() is used as an example, or, of course, when comparisons are explicitly used 
+            // between objects 
+
+            // Usually, when two objects are compared, the built in operators of the left are done (i.e. a < b does 
+            a's less than method)
+
+
+Modules in Python can be thought of similarly to source files in C++. Both modules and classes are used to organize 
+source code, but they are different. 
+    i.e. modulename.py <- module file, may contain classes, variables, etc. 
+            OTHER CODE 
+            if __name__ == '__main__': <- This will only be true if the module is run at the top level, as through the shell (i.e. $python3 modulename.py)
+                CODE <- Usually, for a module, this code will just consist of test cases  
+            
+    To use a module, you use the import statement. Doing so creates a new namespace (dictionary mapping names to values),
+    reads and executes modulename.py (i.e. all code that is not in a class or method) in the context of that namespace, 
+    and adds a name modulename to the current file's namespace.  
+        i.e. import math
+             math.log
+
+Packages in Python are effectively a module of modules. Packages are oriented towards developers - different developers 
+can work on different types of packages (i.e. a operating system developer works on the /io/ package). This is different 
+from classes - which are a runtime notion and do not allow for this separation of concerns. Packages and the modules 
+that they contain provide an API for other modules that may use those other packages (i.e. an /io/ package may need to 
+use something from /net/)
+    /code directory/
+        math.py <- Import math 
+        /net/ <- import net.io.read 
+            /connection
+                ...
+            /io/
+                read.py
+                write.py 
+
+    Packages may conventionally contain an init.py file to perform any initializations when packages are imported. 
+
+
+The environment variable PYTHONPATH can be used to set the environment path for Python programs when imports are made
+such that they can be found from anywhere in the system:
+    i.e. PYTHONPATH = /home/vivek/pylib:/usr/share/python 
+                    ^ look here first   ^ then here second 
+    
+Client-Server Computing:
+    Client-server computing involves a client(s) (usually running a browser) that coopeartes with a web server (a program). 
+    The server maintains state, usually with databases. Clients communicates with each other by communicating to the server, 
+    requesting a change in state (i.e altering the database), and then the server communicates with the client or other clients.
+
+    A sizeable fraction of applications are client-server applications.
+
+    Node + React are built upon POSIX (sh, C++, etc.). 
+        In both NODE + React and POSIX, quoting can be an issue. Likewise, configuration settings are important (i.e. 
+        package managers, building programs, etc.)
+
+    Performance Issues:
+        Traditional Issues:
+            CPU time (~ energy consumed)
+            real time 
+            RAM usage (servers usually require a lot of RAM)
+            I/O 
+        New Issues:
+            Throughput (number of client requests per second)
+                Big is better 
+                To improve throughput: 
+                    The server might do actions "out of order" (i.e. do the easier tasks first) compared 
+                    to request order. This allows it to do more orders per second, though the unluckily ordered requests 
+                    take longer (more latency)
+                    The server might do actions in parallel. 
+
+            Latency (delay between the request to the server and the response back from the server)
+                Small is better 
+                To improve latency:
+                    Build a better connection to send signals (not feasible if you're poor).
+                    Cache previous queries, and use these queries for any future needs, but stale caches may occur 
+                    and potentially give incorrect responses. 
+            
+            Latency and throughput are often competing with each other. A server can handle many requests but 
+            make the client wait. 
+
+    Correctness Issues:
+        An out-of-order execution may result in incorrect results (i.e. withdraw from bank first instead of depositing, 
+        which fails b/c of negative balance)
+        
+        Stale caches (returns incorrect data), requiring cache validation between the client and server.
+    
+    CS 118 in a Nutshell:
+        Basic Networking Styles:
+            Circuit switching: Physical wires are connected between networks - a signal is sent across the "circuit" 
+            to reach a specific device. Getting to this specific device may require going between intermediary devices.
+            Packet switching: A large chunk of data is broken down into tiny little "packets", which are sent to a various 
+            local routers (each of which may take different paths), and then reconstructed once reaching the specified 
+            destination.
+
+
+    Alternatives to Client-Server Computing:
+        - Single computer applications 
+        - Peer-to-peer connections (Decentralized):
+            There is no single central server, the clients just communicate to each other directly. If a peer goes down, 
+            then they can just ask another peer. However, this is difficult in managing the shared state among all peers. 
+            This approach also requires more setup (for peers to know what the other peers are, etc)
+        - Primary / Secondary: 
+            A primary machine keeps track of all the work that needs to be done (overseer) and then farms those tasks 
+            off to secondary servers (which then returns any answers off to the primary server)
