@@ -133,10 +133,80 @@ Client-Server Computing:
         Basic Networking Styles:
             Circuit switching: Physical wires are connected between networks - a signal is sent across the "circuit" 
             to reach a specific device. Getting to this specific device may require going between intermediary devices.
+                Circuit switching has a guaranteed arrival.
+
             Packet switching: A large chunk of data is broken down into tiny little "packets", which are sent to a various 
             local routers (each of which may take different paths), and then reconstructed once reaching the specified 
             destination.
+                Packet switching has no guaranteed arrival (all the packets may not arrive ~ they may be lost). Packets may also 
+                be received out of order (some packets may arrive via a faster route than others) or even duplicated.
 
+                To address these problems with packet switching, the Internet Protocol Suite acts as a foundation to manage this 
+                transfer of data. Its basic idea is to layer protocols on top of each other:
+                    Link Layer: A point to point connection (router to an adjacent router). The link layer is hardware oriented - 
+                    protocols such that adjacent hardware can properly communicate with each other. 
+                    
+                    Internet Layer: This layer deals with simply sending packets. 
+                        This layer is based off of the Internet Protocol (IP), which has various versions. 
+                        It deals with packets and is connectionless - it does not assume it knows what other 
+                        routers are doing, it simply forwards them a packet. 
+                        IPv4:
+                            A packet is structured:
+                            [HEADER | PAYLOAD]
+                            The header consists of metadata, which consists of information about the packet:
+                                length of packet, 
+                                protocol number - usually tells you the type of data etc. so that the router knows how to prioritize packets 
+                                or what to do with completed messages
+                                source IP address - 32 bit 
+                                destination IP address - 32 bit
+                                checksum - used to determine if the data gets corrupted
+                                TTL - time-to-live, measuring the number of hops, as to avoid loops
+
+                        IPv6:
+                            Expands IP addresses to 128 bits (since 32 bits are not enough)
+
+                    Transport Layer: This layer deals with data channels - sending multiple packets. 
+                        UDP (User Datagram Protocol): This acts as a thin layer over IP (almost on the same layer as IP) used for applications 
+                        to send single, short messages over the internet - for applications that work packet-wise. This may be used for fairly short 
+                        queries, where it doesn't necessarily matter if packets are lost (since it is not costly to simply try again). 
+
+                        TCP (Transmission Control Protocol): This protocol supports a data stream implemented in terms of packets. This stream of data 
+                        is reliable (internally, it will send a packet, get an acknowledgement it was sent, and resend if it was not acknowledged). It sends 
+                        data at a correct rate such that a router is not overloaded - this is done via flow control. The data stream is also ordered before 
+                        it is given to the higher layer (application). The data is also error-checked, end-to-end 
+
+                    Application Layer: This layer deals with individual applications, each with their own unique 
+                    application layer (web, voice, etc.)
+                        RTP (Realtime Transmission Protocol): This application protocol is used to send realtime data (i.e. Zoom for video calls). The data 
+                        should get through in a reasonably reliable way that is also fast. This uses UDP since UDP is faster than TCP (TCP takes too long 
+                        to verify and order packets).
+                        
+                        HTTP (Hypertext Transfer Protocol): This is used to send web pages. This uses TCP, since it is more important that data is transmitted 
+                        reliably. This is used to define the "web", which consists of this protocol - which creates a TCP connection, allowing for the client to 
+                        GET a webpage, to which the server responds with content - and HTML, which is the hypertext markup language. 
+                            Port 80 is an internet port for a server (different ports do different things) that is used for HTTP. 
+                            An HTTP GET query returns a request, a header of the response (containing metadata), and a payload of the response (HTML). 
+                            SGML (Standard Generalized Markup Language): A standardized language designed to publish documents online. It is declarative rather 
+                            than imperative - how the data is organized, specified, etc. is declared. The markup specifies the structures and attributes of the document.
+                              
+
+                        HTTPS (Hypertext Transfer Protocol "Secure"): This adds security via encryption. "Certificates" are supplied by authoratative bodies, which 
+                        are what verify that a server is secure.
+                        
+                        HTTP/2: Builds upon HTTP by adding:
+                            Header compression
+                            Server push. In HTTP 1, the server will only send a response if there is a request; server push lets the server send a response 
+                            without any initial request. 
+                            Pipelining: Allows for responses to be better done in parallel. 
+                            Multiplexing: Lets several HTTP connections to be run over the same TCP channel. A user can go through multiple websites over the same 
+                            channel if the server owns all of those websites. 
+
+                        HTTP/3: Not released yet:
+                            More multiplexing 
+                            No longer based on TCP - based on UDP (helps for video). Avoids head-of-line blocking delays by allowing for dropped packets instead of waiting 
+                            for that packet to return (renders a webpage with what is there instead of waiting for EVERYTHING to load).
+
+                        
 
     Alternatives to Client-Server Computing:
         - Single computer applications 
@@ -147,3 +217,4 @@ Client-Server Computing:
         - Primary / Secondary: 
             A primary machine keeps track of all the work that needs to be done (overseer) and then farms those tasks 
             off to secondary servers (which then returns any answers off to the primary server)
+    
