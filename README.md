@@ -120,9 +120,19 @@ DESTINATION will be copied to the current directory.
 #### System Management Commands
 - `chmod PERMISSIONS FILE` changes the permissions of FILE to PERMISSIONS
   - Permissions can easily be set using the symbolic mode, where the character representing the group (u = owner, g = group, o = other, a = all), a symbol (+ for adding permissions, - for removing permissions, or = for setting permissions exactly as written), and a character representing the permission (r = read, w = write, x = execute) are all specified
-  - i.e. `chmod u+rwx` gives reading, writing, an executing permissions from the user
-  - i.e. `chmod ug-x` removes executing permissions from the user and group
-  - i.e. `chmod u=rwx,g=rx,o=r`
+    - i.e. `chmod u+rwx` gives reading, writing, an executing permissions from the user
+    - i.e. `chmod ug-x` removes executing permissions from the user and group
+    - i.e. `chmod u=rwx,g=rx,o=r`
+  - Permissions can also be set up in octal mode, specifying a three-digit number with each digit between 0 and 7. The first digit is the permissions for the owner, the second digit is the permissions for the group, and the third digit is the permissions for other.
+    - 0: No permissions (---)
+    - 1: Execute permission (--x)
+    - 2: Write permission (-w-)
+    - 3: Execute and write permission (-wx)
+    - 4: Read permission (r--)
+    - 5: Read and execute permission (r-x)
+    - 6: Read and write permission (rw-)
+    - 7: All permissions (rwx)
+    - i.e. `chmod 420 testfile` will give the user reading permission, the group writing permission, and other users no permissions (r---w----)
 - `ps` outputs the current processes. By default, it outputs the processes running in the current shell. The output format is as follows: **Process ID, Terminal Type, Time Running, Command Launching Process**
   - `-e` flag outputs all running processes
   - `-T` flag outptus all processes associated with the terminal
