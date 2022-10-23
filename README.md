@@ -191,7 +191,7 @@ DESTINATION will be copied to the current directory.
 - Shell scripting essentially boils down to making use of the shell's existing commands to create other scripts, as well as basic computer science structures such as variables, comparisons, and loops.
 - When creating a shell script, include at the top of the script `#!/bin/sh` or `#!/bin/bash`, which indicates what environment the system should execute the script in (sh or Bash)
 #### Expansions
-- The shell will expand certain characters if they are not in quotes. Use single quotes to prevent characters from being expanded and to literally  (except for ' itself). Double quotes will also literally interpret most characters except for '$', '`', and '\'.
+- The shell will expand certain characters if they are not in quotes. Use single quotes to prevent characters from being expanded and instead literally interpret them (except for ' itself). Double quotes will also literally interpret most characters except for '$', '`', and '\'.
 - One form of expansion done by the shell is globbing, which looks for pattern (similar to regex, but not the same) in filenames. This involves the characters '?', '*'
   - `?` is used to match a single character
     - i.e. `echo exer?.html` will output exer1.html, exer2.html, exer3.html if they exist in the directory
