@@ -29,7 +29,7 @@
         - If an item in VARLIST contains only a single value, then that variable is assigned `nil`
         - Use `let` to create local variables and use `setq` to actually change those variables
     - `(push ITEM LIST)` pushes ITEM to the beginning of LIST
-    - `(defun function-name (ARGUMENTS) "OPTIONAL DOCUMENTATION" (interactive info) body)` is used to create a function
+    - `(defun function-name (ARGUMENTS) "OPTIONAL DOCUMENTATION" (interactive info) (body))` is used to create a function
     - `(progn body)` allows for multiple expressions to be performed in succession
     - `(if COND THEN ELSE)`
         -     (if nil
@@ -44,6 +44,11 @@
         - Bytecode is typically portable - meaning it can be used with any architecture, though, compared to machine code, it may not be as fast 
 
 # Emacs Lisp
-byte-compile-file
-Single threaded
-(global-set-key)
+- When creating an ELisp function, you can load it into your Emacs session by performing `M-x load-file` and then entering the file containing that function definition
+    - Whenever you do `M-x`, you can then enter the function name and call it from your Emacs session
+- the Emacs `(global-set-key "KEY" FUNCTION)` function binds "KEY" to FUNCTION
+    - i.e. `(global-set-key "@" 'what-cursor-position)` will set the @ key to the 'what-cursor-position function (note the ' before the function, as we don't want to actually evaluate it)
+        - If you wanted to undo this, you would copy the "@" key and use the command `(global-set-key "@" 'self-insert-command)`
+- The command `byte-compile-file` compiles an Elisp file into bytecode
+- `point-min` is a variable that points to the beginning of the buffer region
+- `point-max` is a variable that points to the end of the buffer region
