@@ -78,7 +78,7 @@ Dictionary Operations:
     d.values() Returns a list of values 
     d.update(d1) Updates d with key/values from d1, overriding values of d or adding new key/value pairs if necessary
     del d[k] Deletes the key/value pair
-    d.get(k[, v]) Deletes the k value of d (like d[k]) but if there is no value, then it returns v 
+    d.get(k[, v]) Gets the k value of d (like d[k]) but if there is no value, then it returns v 
     d.popitem() Deletes an (effectively random) key/value pair from the dictionary and returns it 
 
 Functions:
