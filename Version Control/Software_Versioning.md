@@ -105,4 +105,78 @@
           =======
           B
           >>>>>>>
-          
+
+# Rebasing
+- Merging can be a bit unfriendly in collaborative environments - it is difficult to review proposed changes from a merge alone
+- Rebasing involves taking the changes made from a branch and then applying the "deltas" to a different branch (typically main) - there is a commit applied to the branch being rebased to for each diverging commit in the source branch
+    - If collisions emerge, they must be resolved manually
+- Rebasing is preferred to merging in cases where it is better to show a "cleaner" history, whereas merges clutter the history
+    - A downside to this, though, is that rebasing does not show the full history 
+# Bisecting
+- Bisecting is used when determining which commit introduced a bug
+# Git Internals
+- Most Git commands are **porcelain** - meaning that they are high-level
+- Plumbing commands are the **low-level** functionalities of Git 
+    - At the low level, `git clone` is able to work so quickly because it contains hard links to already existing files (from prior versions). These files are read only, so they cannot be modified in any way whatsoever
+    - Most  files in `.git` cannot be changed
+- `.git` directory:
+    - `.git` is the representation of the entire state of the repository
+    - `.git/branches` is an obsolete directory (it used to contain the branches)
+    - `.git/config` is a file that contains the git configuration specific to that repository (such as the remote)
+        - This will merge the global configurations and the repository-specific configuration
+    - `.git/description` is an obsolete file 
+    - `.git/HEAD` is a file that contains the path to the current branch (HEAD)
+    - `.git/hooks` is a subdirectory containing executable files that act as hooks called for different Git commands (i.e. write a hook that checks for a syntax error before a commit)
+    - `.git/index` is a representation of the staging area (for the next planned commit)
+    - `.git/info/exclude` is an addition to the `.gitignore` file 
+    - `.git/logs` is a directory that keeps track of a history of branch tip locations
+    - `.git/objects` is a directory that contains the actual main repository database
+    - `.git/refs` and `.git/packed-refs` contain all branch tips and pointers in the repository
+- Files are not completely stored in secondary storage - they are also stored in RAM (cached)
+    - Git makes use of this sort of idea - Git objects in a repository act as a tree of files in a file system
+        - Just like files are identified uniquely by inode numbers, Git objects are identified uniquely by SHA-1 checksums 
+        - However, while files are mutable, Git objects are *not* mutable since they are representative of the repository history (and the checksum is based on the object content)
+- `git hash-object [FILE]` will output the SHA-1 checksum of FILE
+    - `-w` will put the checksum of the FILE into the repository
+        - It will now be located in `.git/objects` - the name of the file is under the directory of the first two characters of the checksum followed by the remaining characters
+            - i.e. `c9a1d68...` is located under `.git/objects/c9/a1d68...`
+- `git cat-file -p HASH` will output the contents of a Git object (give by HASH)
+    - `git cat-file -t HASH` will output the type of the object
+- Git object types (every object is identified by a SHA-1 checksum):
+    - Internally, Git objects are represented by metainformation (such as the type of the object and its byte size) followed by the actual string representation of the object
+        - Git objects, though, are compressed using the *gzip* algorithm 
+    - A **blob** is a regular file, representing a sequence of bytes that can be interpreted as anything
+    - A **tree** represents a node in a tree of objects that maps names to SHA-1 checksums (which can be of blobs or other trees)
+        - Each commit in Git points to a tree (which, as mentioned, can contain blobs or other trees - which represent subdirectories)
+    - A **commit** points to the tree that the commit represents (the source code at that version) and to its parent commit(s)
+        - These pointers are represented by the SHA-1 hash
+        - When a commit involves file changes, only the blobs according to those files are changed in the tree - the other, unchanged files retain the same pointers as the trees in prior commits 
+            - The ancestor directory(ies) for a changed file malso change
+            - If a file being changed is large, Git will optimize storage by just storing the difference between the previous and current version
+- Compression Aside:
+    - Huffman Coding: This is the best possible compression algorithm for its constraints:
+        - (a) input is a sequence of symbols from a known alphabet (256 possible bytes)
+        - (b) the output is a bit string representing the input sequence
+        - (c) The probability of each symbol occuring is known (most common is symbols for English is a space, 'e', etc.)
+            - The probability can be precomputed and shared between the compressor and decompressor
+            - Another possibility is to compute the encoding table and then send it as metadata in the compressed file 
+                - This requires reading through the entire input to first compute the table and then read again to compute the compression
+            - The most common approach involves both the sender and the receiver with a starting table
+                - The sender sends the first byte according to the table, and then updates its encoded table (the receiver does the same)
+                    - The Huffman tables are updated dynamically 
+        - (d) Each input symbol corresponds to some bit string 
+        - The probabilities of different symbols are represented through a a binary tree (known as a Huffman Tree)
+            - The two least likely symbols are first combined into a node (which has the sum of the probabilities)
+                - This is then repeated for the next least likely symbols and then combining those nodes 
+        - Huffman Coding creates a table of symbols and each bit string to represent it (i.e. space maps to 00, 'e' maps to 010, etc.)
+            - The most popular symbols will have a small bit sequence whereas the least popular symbols will have a longer bit sequence (00 is two bits compared to the 8 bits in a byte) 
+            - This mapping is done without ambiguity (so a part of a bit symbol cannot be interpreted as a differnet symbol)
+        - Using this table, the file is compressed by reading each symbol and outputting its bit string and then uncompressed by mapping backwards from each outputted bit string 
+    - Dictionary Coding: Instead of mapping individual symbols to bit sequences, common words are mapped to bit sequences in a table similar to Huffman Coding 
+        - This saves for common words or phrases in a file (i.e. "the" in English can be mapped to 1)
+            - This can also be useful for program files with common keywords (i.e. "int" is repeated a lot)
+        - Dynamic dictionary coding can be done similar to dynamic Huffman Coding 
+            - An initial, trivial table is present for both the sender and the receiver, which is then built as they communicate (if a word is found, the receiver should look back and update accordingly)
+                - However, this assumes the receiver has enough RAM for the entire file 
+                    - To mitigate this, a sliding window is used to communicate when a dictionary word is found 
+    - zlib/gzip will first use dictionary coding and then Huffman Coding on the result 
