@@ -31,6 +31,8 @@ Linux is also a multiprocess operating system. Many processes can run in the bac
 
 ### Commonly Used Commands
 Commands are effectively just executable programs that use the shell as an interface. To run an executable file or command that is in the directory you are currently in, you must prepend that command with `./`. Commonly used commands are found through the system PATH, which is an environment variable that lists all locations that Linux should look for when a command is entered (i.e. if you use `cp` then the system will probably look for it in /bin or /usr/bin, both of which are already on the system's PATH). Running a command without `./` causes the system to search for that command in the PATH. When developing commands or executable programs meant to use system-wide, it is often useful to append that command to a directory that is already listed in the PATH or to append a new directory containing that command to the system's PATH so that it can be run from anywhere.
+  - `export PATH=DIRECTORY:$PATH` will add DIRECTORY to the environment PATH for the current session
+    - Putting DIRECTORY before PATH, as above, will result in global commands being searched from DIRECTORY first before the rest of the PATH - so if two commands have the same name, the DIRECTORY command will be found and executed
 
 - Ctrl-C to stop a process
 - Ctrl-Z to suspend a process
