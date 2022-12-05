@@ -1,0 +1,28 @@
+
+# Compression
+- Huffman Coding: This is the best possible compression algorithm for its constraints:
+    - (a) input is a sequence of symbols from a known alphabet (256 possible bytes)
+    - (b) the output is a bit string representing the input sequence
+    - (c) The probability of each symbol occuring is known (most common is symbols for English is a space, 'e', etc.)
+        - The probability can be precomputed and shared between the compressor and decompressor
+        - Another possibility is to compute the encoding table and then send it as metadata in the compressed file 
+            - This requires reading through the entire input to first compute the table and then read again to compute the compression
+        - The most common approach involves both the sender and the receiver with a starting table
+            - The sender sends the first byte according to the table, and then updates its encoded table (the receiver does the same)
+                - The Huffman tables are updated dynamically 
+    - (d) Each input symbol corresponds to some bit string 
+    - The probabilities of different symbols are represented through a a binary tree (known as a Huffman Tree)
+        - The two least likely symbols are first combined into a node (which has the sum of the probabilities)
+            - This is then repeated for the next least likely symbols and then combining those nodes 
+    - Huffman Coding creates a table of symbols and each bit string to represent it (i.e. space maps to 00, 'e' maps to 010, etc.)
+        - The most popular symbols will have a small bit sequence whereas the least popular symbols will have a longer bit sequence (00 is two bits compared to the 8 bits in a byte) 
+        - This mapping is done without ambiguity (so a part of a bit symbol cannot be interpreted as a differnet symbol)
+    - Using this table, the file is compressed by reading each symbol and outputting its bit string and then uncompressed by mapping backwards from each outputted bit string 
+- Dictionary Coding: Instead of mapping individual symbols to bit sequences, common words are mapped to bit sequences in a table similar to Huffman Coding 
+    - This saves for common words or phrases in a file (i.e. "the" in English can be mapped to 1)
+        - This can also be useful for program files with common keywords (i.e. "int" is repeated a lot)
+    - Dynamic dictionary coding can be done similar to dynamic Huffman Coding 
+        - An initial, trivial table is present for both the sender and the receiver, which is then built as they communicate (if a word is found, the receiver should look back and update accordingly)
+            - However, this assumes the receiver has enough RAM for the entire file 
+                - To mitigate this, a sliding window is used to communicate when a dictionary word is found 
+- zlib/gzip will first use dictionary coding and then Huffman Coding on the result 

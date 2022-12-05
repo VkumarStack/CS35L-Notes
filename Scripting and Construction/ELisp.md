@@ -46,9 +46,23 @@
 # Emacs Lisp
 - When creating an ELisp function, you can load it into your Emacs session by performing `M-x load-file` and then entering the file containing that function definition
     - Whenever you do `M-x`, you can then enter the function name and call it from your Emacs session
-- the Emacs `(global-set-key "KEY" FUNCTION)` function binds "KEY" to FUNCTION
+- The Emacs `(global-set-key "KEY" FUNCTION)` function binds "KEY" to FUNCTION
     - i.e. `(global-set-key "@" 'what-cursor-position)` will set the @ key to the 'what-cursor-position function (note the ' before the function, as we don't want to actually evaluate it)
         - If you wanted to undo this, you would copy the "@" key and use the command `(global-set-key "@" 'self-insert-command)`
 - The command `byte-compile-file` compiles an Elisp file into bytecode
+- `point` is a variable that indicates the current cursor position (how many characters away from the beginning of the buffer region)
 - `point-min` is a variable that points to the beginning of the buffer region
 - `point-max` is a variable that points to the end of the buffer region
+- `(goto-char (LOCATION))` jumps the cursor to the specified location (could be point-min, point-max, etc)
+- `mark` is a variable that represents the location of the current mark
+- `(push-mark)` is a function that sets a mark at the current position of the cursor
+- `(exchange-point-and-mark)` is a function that swaps the cursor and mark
+- `(save-excursion (BODY))` is a function that saves the location of the cursor and restores it after BODY is executed - so even if point were changed in BODY, it would be restored so that the user's cursor doesn't move unexpectedly after the function ends
+- `(message MESSAGE_STRING)` is a function prints MESSAGE_STRING to the echo area
+- `(buffer-name)` is a function that returns the name of current buffer
+    - `(current-buffer)` is a function that returns the current buffer itself
+    - `(other-buffer)` is a function that returns the most recently used buffer
+    - `(switch-to-buffer (BUFFER))` switches to the buffer represented by BUFFER
+    - `(buffer-size)` returns the size of the current buffer
+- `(buffer-file-name)` is a function that returns the name of the file which the current buffer belongs to
+- `(beginning-of-buffer)` is a function that moves the cursor to the beginning of the buffer

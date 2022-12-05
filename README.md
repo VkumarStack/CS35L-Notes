@@ -11,6 +11,10 @@ Operating systems like Linux are useful because they allow for the management of
 Linux users should be familiar with some common directories and their usages:
   - **/bin** contains executable programs (this includes commands) that are part of the Linux operating system, such as cp, cat, ls, etc.
   - **/dev** contains *representations* of external devices such as flashdrives, keyboards, etc. and are typically used in programs that need to interact with such devices
+    - **/dev/full** is a special file that is always interpreted as full - writing to it will result in a insufficient space error and reading from it provides an infinite number of zero bytes
+    - **/dev/null** is another special file that will discard anything written to it and will always return an end-of-file on reading
+      - In the context of a shell script, writing to **/dev/null** may be used as a way to check that a command succeeds without storing it in a file or outputting it
+    - **/dev/zero** is another special file that, like **/dev/null** will discard anything written to it. However, reading from it will produce an endless stream of null characters 
   - **/lib** contains library files essential to the system
   - **/etc** contains system configuration files and initialization scripts
   - **/home** contains the home for the system's root user (administrator)
@@ -74,7 +78,10 @@ Commands are effectively just executable programs that use the shell as an inter
   - `(PATTERN){NUM}` will match NUM instances of the preceding pattern
   - `(PATTERN){NUM, }` will match NUM or more instances of the preceding pattern
   - `(PATTERN){NUM1, NUM2}` will match between NUM1 and NUM2 instances of the preceding pattern
-
+  - The aforementioned quantifiers (`*`, `+`, `?`) are greedy, meaning that, if a pattern is found, the expression will still continue to see if further characters fit the pattern
+    - Appending a `?` *after* a quantifier will make it lazy instead of greedy 
+  - Backreferences allow for capture groups to be referenced 
+    - i.e. `sed -E 's/([0-9]{3})/\1\1/g'` will substitute the three digit number matched by the capture group ([0-9]{3}) for itself twice (\1 referenecs the first capture group, which in this case is that expression)
 - To get information about any command, do `man COMMAND`, outputs a manual page for that command.
 
 #### Navigation Commands
@@ -216,7 +223,9 @@ DESTINATION will be copied to the current directory.
   - This can also be done using `${VARNAME}`, which acts as a disambiguation mechanism
     - cases such as `echo $VARNAME.txt` where the intention is to replace just the VARNAME portion with the variable will fail, so the bracket grouping should be used instead as `echo ${VARNAME}.txt`
 - The shell has built in variables:
-  - `$?` is the last command or program's return value
+  - `$?` is the last command or program's exit value
+    - 0 indicates that the previous command succeeded while a nonzero value indicates that the previous command failed in some way
+    - A script can return its own exit value using the `exit NUM` command where NUM is the exit code
   - `$$` is the current script's process ID
   - `$#` is the number of arguments passed to the script
   - `$@` is all arguments passed to the script
@@ -281,4 +290,8 @@ DESTINATION will be copied to the current directory.
   - i.e. `for i in 1 2 3 4 5` will iterate through 1, 2, 3, 4, and 5
   - i.e. `for i in {1..5}` will do the same as above
   - i.e. `for i in $(seq 1 5)` will do the same as above
+  - i.e. Looping through all arguments:
+    -     for arg in $@
+          do
+            echo $arg
 - The `do` statement in both above loops can be put immediately after the `for` clause if separated with a semicolon `;`

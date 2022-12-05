@@ -1,0 +1,39 @@
+# Cloud Computing
+- Cloud computing involves:
+    - On-demand self-service, where a user can deploy services without having to buy machines (i.e. for services) - this allows for a low barrier to entry
+    - Rapid elasticity - once a cloud-based service is set up, one can easily ask for more devices or more powerful machines (for a higher cost, of course), allowing for easier scalability
+    - Resource pooling, where multiple projects can be hosted on a single device 
+    - Measured service, where the storage and cpu power is being used (in order to compute the cost)
+    - Broad network access, where the service can be fairly accessed from anywhere
+- A downside to cloud computing involves a reliance on the cloud service provider to correct any issues - when the service goes down, you must hope that they fulfill their promises 
+    - Additionally, there are security issues that may arise by sending one's data (which may be classified/protected) to a third party provider
+- An advantage to cloud computing is that it allows for scale to be managed better - i.e. if you know traffic peaks at a certain time, then you can temporarily increase your cloud storage and then decrease it afterwards, whereas without cloud service you would be forced to buy more hardware 
+- Infrastructure as a Service (IaaS):
+    - This approach simply provides the hardware necessary to host the service (servers and network)
+    - i.e. AWS
+- Platform as a Service (PaaS):
+    - This approach is not only providing hardware, but also is providing access to a platform (operating system + architecture + middleware + database servers)
+        - This takes the work off of the developer, but at a higher cost 
+    - i.e. Google App Engine
+- Software as a Service (SaaS):
+    - This approach involves the provider not only providing all the aforementioned features, but also software
+        - This is less work for the developer, but also less control and higher cost
+    - i.e. Salesforce 
+- Serverless Computing:
+    - This approach simply involves the provider giving APIs that are run in stateless programs (small programs that immediately save their state in the provider's database)
+        - This approach does not save any data to the server's RAM, which allows for the underlying program to be run anywhere
+- These cloud computing services make use of virtual machines as a "building block"
+    - When the services provide "hardware", they are in reality providing virtual machines 
+    - Virtual machines are built with lower level languages (C) that implement the instruction set of the machine being emulated (ARM, x86, etc.)
+        - If there are instructions that are shared by both the machine being emulated and the host machine, then optimizations can be made by just using those instructions instead of trying to reemulate them
+            - An exception to this is kernel mode instructions (which must be emulated)
+        - A way to optimize the virtual machine process (since machines may run many instances of the same virtual machine), what is often done is the machines sharing the same, read-only programs and data among the different virtual machines 
+            - This can allow for common files to be shared in RAM as well (and thus new virtual machine instances can boot up quickly)
+- Containerizations can be thought of as "cheap" ways to run virtual machines - i.e. Docker
+    - A `dockerd` is a daemon for Docker, which is a program that runs a background process managing Docker containers 
+    - A Docker container is a process that corresponds to a lightweight virtual machine 
+        - A container is created by sending a request via the Docker Engine API (command-line interface)
+    - Docker objects include containers (environments to run applications), images (template to build a container), and a service (lets an application run across container boundaries)
+    - Registries are repositories for Docker images (pushing to a registry or pulling a registry to use existing container images)
+- Applications with lots of (Docker) containers requires container orchestration tools, such as Docker Swarm, Kubernetes, Amazon Elastic Compute Services (ECS), Redhat Openshift, etc.
+    - These technologies require addressing the issues of load balancing, resource constraints, logging, monitoring, debugging, security, rolling updates vs. blue-green update (start containers with new update and then gradually kill off the old containers)

@@ -28,22 +28,38 @@
 - `git commit` will add the files to the staging area in the latest snapshot, with a commit message inserted via the text editor specified under the Git configuration settings
     - `-m MESSAGE` flag allows for the commit message to be specified in the command instead of via a text editor
     - `-a` flag allows for every file being tracked to be automatically staged before the commit (so there is no need to do `git add`)
+    - Each commit in Git has a unique ID, representing a checksum of the contents of the commit, which verifies that the content has not been corrupted as well as provides a unique identifier to a given commit
+    - Commit messages are important - they indicate **why** a commit was made and **why** it is important
+        - Reading through all the code associated with a change can take too much effort, a simple commit message can be more meaningfully understood
+        - Commit messages also allow for the history of a project to be better comprehended - as you go back, you can see the motivation for each commit 
+        - Comments are meant to explain the workings of code; commit messages are meant to explain the workings behind a change of code 
+    - A common pattern is a committer and author being different; an individual creates code but another individual can commit it for them
+        - Under `git log`, this results in differences in author date and commit date
 - `git rm FILE` untracks FILE and removes it from the current working directory
     - `-f` forces the removal of FILE if it had already been added to the staging area 
     - `--cached` untracks FILE but does not remove it from the current working directory
 - `git mv FROM TO` renames or moves file FROM to TO 
     - Using `mv` may fail as Git does not necessarily track file movement or renaming
 - A `.gitignore` file contains a list of filenames or patterns for filenames that Git should not automatically add or track
+    - - `.gitignore` files themselves can be tracked by Git 
+    - It is typical to put executable files, temporary files (those beginning with #), machine code files (.o files, since they are machine dependent and therefore is not portable), imported packages (i.e. node_modules), and passwords/security keys (store them in an environment variable) in your `.gitignore` file
+- `git config` is used as a tool for configurations of Git on the device
+    - `git config -l` lists all configurations
+    - `.git/config` is a file created when a repository is created/cloned, and this configuration can be edited accordingly (though if there is any errors, then Git stop works)
+        - `.git/config` is not under version control, so be careful when working with it (any file under the `.git/` is not versioned)
+    - There is a `/.gitconfig` file located usually at the home directory that contains global configurations 
 # Viewing History
 - `git diff` will:
     - If no arguments are added, show the differences between the working directory and the staging area 
     - If `--staged` is added, show the differences between the staging area and the last commit
+    - If `--cached` is added, display the differences between the latest changes and the index
     - If `HEAD` is the argument, show the differences between the latest commit and the current working files
     - If `VERSION1..VERSION2` is the argument, show the differences between the commit represented by VERSION1 and the commit represented by VERSION2 (VERSION1 and VERSION2 can be the commit hashes or tags)
 - `git log` will: 
     - If no arguments are added, display the history of the current repository, listing each **commit**, its **author**, its **author date**, and its **commit message**
     - If `A..B` are the arguments, display the history from, but not including, version A up to and including version B, where A and B can be the commit hashes or tags representing commits
         - `HEAD` is an identifier for the latest version
+        - `B` starts from the very beginning of the project all the way up to B
         - `A^` is an identifier for the version before A
     - If `-p` is added, display the difference (patch) introduced in each commit
     - If `-[NUM]` is added, limit the log entries displayed to NUM entries
@@ -69,7 +85,8 @@
             - `%ce` is committer email
             - `%cd` is committer date
             - `%cr` is committer date, relative
-            - `%s` is subject    
+            - `%s` is subject   
+- `git show [COMMIT]` indicates the changes made for a given commit
 # Undoing Changes
 - `git commit --amend` takes the staging area and uses it for a commit that replaces the most recent commit
     - Internally, this branches off of the old commit and "abandons" the branch containing the broken commit
@@ -143,7 +160,16 @@
         - You can either commit your changes or stash them
 - A project *diverges* when work is done and committed on separate branches     
     - ![Divergent Branches](./divergent-branches.png)
-
+- Cherry-picking fixes is a pattern where, if a bug is introduced relatively early in the tree but there have already been numerous commits and branches following, proper changes are applied to each branch 
+    - While it can be awkward to individually go to each branch and then apply the commit, the process can be automated via shell scripting
+    -     git add F
+          git commit -m 'Emegency fix!'
+          git diff main^! > t.diff
+          git checkout maint // switches to maint branch
+          patch < t.diff // patch will modify old files to look like the old files, according to the diff of the files (the files being changed are located in the meta portion of the diff output)
+          git add F
+          git commit -m 'Emergency fix!'
+        - This can fail if files that were patched were previously being modified in any of the branches
 # Merging
 - `git merge BRANCH` merges the current branch with BRANCH
     - i.e.
@@ -165,6 +191,7 @@
               DIFFERENT CHANGES
               >>>>> iss53: index.html
     - After a conflict is manually resolved, `git commit` can be used to finalize the merge
+
 # Remote Branches
 - Remote-tracking branches are references representing the state of a branch on the upstream remote
     - Remote-tracking branches take the form of `<remote>/<branch>`
@@ -188,6 +215,8 @@
         - ![Rebase 2](./rebase2.png)
             - `git merge experiment` can then be used to fast-foward master to experiment
 - Rebasing should be avoided for branches that others are working on (remotes), as it could confuse other developers - it is best to rebase with completely local changes and then merge those changes to a remote if necessary
+- Rebasing is preferred to merging in cases where it is better to show a "cleaner" history, whereas merges clutter the history
+    - A downside to this, though, is that rebasing does not show the full history 
 
 # Git Tools
 ## Revision Selection
@@ -249,6 +278,48 @@
 ## Reflog
 - `git reflog` inspects the ref log, which is a listing of changes made 
     - The ref log is local, it is not pushed upstream
+## Git Objects
+- `.git` directory:
+    - `.git` is the representation of the entire state of the repository
+    - `.git/branches` is an obsolete directory (it used to contain the branches)
+    - `.git/config` is a file that contains the git configuration specific to that repository (such as the remote)
+        - This will merge the global configurations and the repository-specific configuration
+    - `.git/description` is an obsolete file 
+    - `.git/HEAD` is a file that contains the path to the current branch (HEAD)
+    - `.git/hooks` is a subdirectory containing executable files that act as hooks called for different Git commands (i.e. write a hook that checks for a syntax error before a commit)
+    - `.git/index` is a representation of the staging area (for the next planned commit)
+    - `.git/info/exclude` is an addition to the `.gitignore` file 
+    - `.git/logs` is a directory that keeps track of a history of branch tip locations
+    - `.git/objects` is a directory that contains the actual main repository database
+    - `.git/refs` and `.git/packed-refs` contain all branch tips and pointers in the repository
+- Any kind of content can be inserted into a Git repository - this content is represented as a Git object, which is associated with a unique SHA-1 checksum
+    - `git hash-object FILE` returns the SHA-1 checksum associated with the FILE
+        - `-w` flag will actually insert it into the Git object database
+- Git object types (every object is identified by a SHA-1 checksum):
+    - Internally, Git objects are represented by metainformation (such as the type of the object and its byte size) followed by the actual string representation of the object 
+    - Git objects should not be mutated, as they are supposed to be representative of a certain point in development history
+    - A **blob** is a regular file, representing a sequence of bytes that can be interpreted as anything
+    - A **tree** represents a node in a tree of objects that maps names to SHA-1 checksums (which can be of blobs or other trees)
+        - Each commit in Git points to a tree (which, as mentioned, can contain blobs or other trees - which represent subdirectories)
+        -     $ git cat-file -p master^{tree}
+              100644 blob a906cb2a4a904a152e80877d4088654daad0c859      README
+              100644 blob 8f94139338f9404f26296befa88755fc2598c289      Rakefile
+              040000 tree 99f1a6d12cb4b6f19c8655fca46c3ecf317074e0      lib
+    - A **commit** points to the tree that the commit represents (the source code at that version) and to its parent commit(s)
+        - These pointers are represented by the SHA-1 hash
+        - When a commit involves file changes, only the blobs according to those files are changed in the tree - the other, unchanged files retain the same pointers as the trees in prior commits 
+            - The ancestor directory(ies) for a changed file may also change
+            - If a file being changed is large, Git will optimize storage by just storing the difference between the previous and current version
+        -     tree d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+              author Scott Chacon <schacon@gmail.com> 1243040974 -0700
+              committer Scott Chacon <schacon@gmail.com> 1243040974 -0700
+              
+              First commit
+- Git objects are stored in the file directory based on their hash and are under the `.git/objects` directory
+    - An object is located in the directory specified by the first two characters of its SHA-1 commit and is named with teh remaining characters
+    - i.e. An object with commit hash d670460b4b4aece5915caf5c68d12f560a9fe3e4 would be located under `d6/70460b4b4aece5915caf5c68d12f560a9fe3e4`
+- Git objects are normally compressed using the gzip algorithm, and to read them directly from their file, you must first uncompress the files
+    - `git cat-file -p HASH` will read the Git object file (does the uncompression in the command)
 ## Git Object Naming
 - **pathspec** - working file names
 - **commit** - commit hash, tag, branch name
