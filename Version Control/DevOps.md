@@ -23,6 +23,7 @@
 - Backup Optimizations:
     - One way to optimize backups is through the usage of deduplication (copy-on-write)
         - Effectively, this involves not making a copy but instead storing a reference to the original file and, when the original file is changed, updating the copy to retain the original version
+            - This is usually optimized even more at the lower level by storing references to repeated "chunks" of data among a file and then pointing to an ordered list of those chunks 
             - This approach is faster and takes less space, but is not as good for backups (usually) because it depends on the original file not corrupting (better for possible software failures rather than hardware failures)
     - Another way to optimize backups is to compress the files (usually at the block level or file level)
     - Another optimization strategy is multiplexing, where a single backup device is used to backup many different systems
